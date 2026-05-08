@@ -11,7 +11,7 @@ spec:
   project: default
   source:
     chart: runners
-    repoURL: oci://${REGISTRY_URL}/kuberse/kuberse/helm/runners
+    repoURL: oci://${REGISTRY_URL}/${ORG_NAME}/kuberse/helm/runners
     targetRevision: ${RUNNERS_VERSION}
     helm:
       values: |

@@ -11,14 +11,14 @@ spec:
   project: default
   source:
     chart: platform
-    repoURL: oci://${REGISTRY_URL}/kuberse/kuberse/helm/platform
+    repoURL: oci://${REGISTRY_URL}/${ORG_NAME}/kuberse/helm/platform
     targetRevision: ${PLATFORM_VERSION}
     helm:
       values: |
         kubrain:
           enabled: true
           image:
-            repository: ${REGISTRY_URL}/kuberse/kuberse/img/kubrain
+            repository: ${REGISTRY_URL}/${ORG_NAME}/kuberse/img/kubrain
             pullPolicy: IfNotPresent
           configFile:
             enabled: true

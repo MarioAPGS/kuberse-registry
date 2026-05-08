@@ -11,14 +11,14 @@ spec:
   project: default
   source:
     chart: platform
-    repoURL: oci://${REGISTRY_URL}/kuberse/kuberse/helm/platform
+    repoURL: oci://${REGISTRY_URL}/${ORG_NAME}/kuberse/helm/platform
     targetRevision: ${PLATFORM_VERSION}
     helm:
       values: |
         playhouse:
           enabled: true
           image:
-            repository: ${REGISTRY_URL}/kuberse/kuberse/img/playhouse-kit
+            repository: ${REGISTRY_URL}/${ORG_NAME}/kuberse/img/playhouse-kit
             pullPolicy: IfNotPresent
   destination:
     server: https://kubernetes.default.svc

@@ -11,7 +11,7 @@ spec:
   project: default
   source:
     chart: platform
-    repoURL: oci://${REGISTRY_URL}/kuberse/kuberse/helm/platform
+    repoURL: oci://${REGISTRY_URL}/${ORG_NAME}/kuberse/helm/platform
     targetRevision: ${PLATFORM_VERSION}
     helm:
       values: |

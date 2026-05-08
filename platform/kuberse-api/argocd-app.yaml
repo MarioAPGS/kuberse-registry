@@ -11,14 +11,14 @@ spec:
   project: default
   source:
     chart: platform
-    repoURL: oci://${REGISTRY_URL}/kuberse/kuberse/helm/platform
+    repoURL: oci://${REGISTRY_URL}/${ORG_NAME}/kuberse/helm/platform
     targetRevision: ${PLATFORM_VERSION}
     helm:
       values: |
         kuberse-api:
           enabled: true
           image:
-            repository: ${REGISTRY_URL}/kuberse/kuberse/img/kuberse-api
+            repository: ${REGISTRY_URL}/${ORG_NAME}/kuberse/img/kuberse-api
             pullPolicy: IfNotPresent
   destination:
     server: https://kubernetes.default.svc
