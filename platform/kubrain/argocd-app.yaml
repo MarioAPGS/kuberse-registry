@@ -49,9 +49,6 @@ spec:
               buildapp:
                 chartRepo: oci://${REGISTRY_URL}/${ORG_NAME}/kuberse/helm/buildapp
                 chartVersion: latest
-                registry:
-                  username: env.GITEA_REGISTRY_USERNAME
-                  password: env.GITEA_REGISTRY_PASSWORD
   destination:
     server: https://kubernetes.default.svc
     namespace: platform
