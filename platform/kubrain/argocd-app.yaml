@@ -45,7 +45,6 @@ spec:
                 password: env.ARGOCD_PASSWORD
               vault:
                 url: env.VAULT_URL
-                token: env.VAULT_TOKEN
               buildapp:
                 chartRepo: oci://${REGISTRY_URL}/${ORG_NAME}/kuberse/helm/buildapp
                 chartVersion: latest
