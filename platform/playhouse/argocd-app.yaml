@@ -28,7 +28,7 @@ spec:
         dev:
           image:
             repository: ${REGISTRY_URL}/${ORG_NAME}/kuberse/img/dev-kit
-            tag: dind
+            tag: latest
             pullPolicy: IfNotPresent
           dind: true
           agent: true
