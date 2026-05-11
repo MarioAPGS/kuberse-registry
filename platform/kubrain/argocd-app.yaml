@@ -19,7 +19,7 @@ spec:
           enabled: true
           image:
             repository: ${REGISTRY_URL}/${ORG_NAME}/kuberse/img/kubrain
-            pullPolicy: IfNotPresent
+            pullPolicy: Always
           configFile:
             enabled: true
             content: |
