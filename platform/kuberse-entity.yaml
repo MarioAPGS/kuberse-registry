@@ -2,7 +2,7 @@
 kind: Doc
 type: internal
 metadata:
-  name: platform
+  name: kuberse-platform-docs
   namespace: platform
   title: Platform
   description: >
