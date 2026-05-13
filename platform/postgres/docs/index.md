@@ -75,7 +75,9 @@ graph TB
 
 ## Startup Sequence
 
-PostgreSQL does not start until its admin credentials are available from Vault:
+## Startup Sequence
+
+PostgreSQL does not start until its admin credentials are available from Vault. Since both Vault and PostgreSQL are in the same sync wave (Wave 1), the ordering is handled via an init container that blocks until the VSO has synced the secret:
 
 ```mermaid
 sequenceDiagram

@@ -1,0 +1,27 @@
+name: Publish Plugin
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      force-rebuild:
+        description: Force rebuild all artifacts without new tag
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  release:
+    uses: MarioAPGS/kuberse/.github/workflows/plugin-release.yaml@main
+    with:
+      registry-images: ghcr.io/YOUR_GITHUB_USERNAME
+      registry-charts: oci://ghcr.io/YOUR_GITHUB_USERNAME/my-plugin-plugin/charts
+      registry-manifest: ghcr.io/YOUR_GITHUB_USERNAME/my-plugin-plugin
+      registry-user: ${{ github.actor }}
+      force-rebuild: ${{ inputs.force-rebuild || false }}
+    secrets:
+      registry-password: ${{ secrets.GITHUB_TOKEN }}

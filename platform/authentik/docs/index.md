@@ -176,6 +176,26 @@ Authentik auto-applies YAML blueprints from `/blueprints/custom/` on startup. Th
 
 OIDC providers and applications are **not** managed by blueprints -- they are handled by the OIDC Provisioner Job instead.
 
+### OIDC Provisioner Job timing
+
+The OIDC Provisioner is an ArgoCD **PostSync hook** -- it runs after every successful sync of the Authentik Application. Key behaviors:
+
+- **First deployment**: runs once Authentik pods are healthy
+- **New OIDC client added**: if another module adds a ConfigMap labeled `kuberse.net/authentik-oidc=true`, the provisioner will pick it up on the next Authentik sync (ArgoCD auto-syncs periodically, or you can force it)
+- **Manual re-trigger**: delete the completed Job and sync the Authentik app: `kubectl delete job authentik-oidc-provisioner -n platform` then trigger ArgoCD sync
+- **DNS hairpin side-effect**: this Job also patches CoreDNS to resolve `auth.kuberse.net` to the NGINX Ingress ClusterIP. If CoreDNS is ever reset, re-sync Authentik to restore it.
+
+### Database startup race
+
+Authentik's database (`authentik` in PostgreSQL) is created by the PostgreSQL provisioner CronJob (up to 5 min delay). Authentik will **crash-loop** until the database exists. This is expected behavior:
+
+1. Authentik starts, tries to connect, fails (`database "authentik" does not exist`)
+2. Kubernetes restarts the pod (CrashLoopBackOff)
+3. Within 5 minutes, the PostgreSQL provisioner creates the database
+4. Next restart succeeds, Authentik initializes its schema via Django migrations
+
+No manual intervention is needed. The CrashLoopBackOff resolves automatically.
+
 ## Configuration
 
 | Setting | Value | Description |

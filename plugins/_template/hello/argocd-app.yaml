@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hello
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    chart: my-plugin
+    repoURL: oci://${REGISTRY_URL}/${ORG_NAME}/charts/my-plugin
+    targetRevision: ${MY_PLUGIN_VERSION}
+    helm:
+      values: |
+        hello:
+          enabled: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: my-plugin
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

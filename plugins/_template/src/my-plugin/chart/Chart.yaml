@@ -1,0 +1,11 @@
+apiVersion: v2
+name: my-plugin
+description: A minimal Kuberse plugin
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+
+dependencies:
+  - name: hello
+    version: 0.1.0
+    condition: hello.enabled

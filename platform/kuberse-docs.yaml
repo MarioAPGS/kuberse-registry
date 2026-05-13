@@ -1,0 +1,41 @@
+---
+kind: Doc
+type: internal
+metadata:
+  name: kuberse-platform-docs
+  namespace: platform
+  title: Kuberse Platform Documentation
+  description: >
+    User-facing documentation for Kuberse platform modules, including Vault,
+    PostgreSQL, CloudBeaver, Authentik, Ingress NGINX, Kubernetes Replicator,
+    and Kubrain.
+spec:
+  docs_dir: platform
+  nav:
+    - Home: kubrain/docs/index.md
+    - Kubrain:
+      - Overview: kubrain/docs/index.md
+      - Catalog: kubrain/docs/catalog/overview.md
+      - ArgoCD Resources: kubrain/docs/catalog/argocd-resources.md
+      - Create BuildApp: kubrain/docs/buildapps/create-buildapp.md
+      - Manage BuildApps: kubrain/docs/buildapps/manage-buildapps.md
+      - Docs Portal: kubrain/docs/docs-portal/overview.md
+      - Routes: kubrain/docs/reference/routes.md
+      - API Endpoints: kubrain/docs/reference/api-endpoints.md
+    - Vault:
+      - Overview: vault/docs/index.md
+      - Secrets Management: vault/docs/secrets-management.md
+    - PostgreSQL:
+      - Overview: postgres/docs/index.md
+      - Database Provisioning: postgres/docs/database-provisioning.md
+    - CloudBeaver:
+      - Overview: cloudbeaver/docs/index.md
+      - Connection Discovery: cloudbeaver/docs/connection-discovery.md
+    - Authentik:
+      - Overview: authentik/docs/index.md
+      - OIDC Provisioning: authentik/docs/oidc-provisioning.md
+    - Ingress NGINX:
+      - Overview: ingress-nginx/docs/index.md
+      - Networking Model: ingress-nginx/docs/networking-model.md
+    - Kubernetes Replicator:
+      - Overview: kubernetes-replicator/docs/index.md

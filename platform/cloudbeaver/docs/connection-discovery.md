@@ -155,6 +155,8 @@ The script computes a SHA-256 hash of all discovered connections (both sources, 
 
 This ensures CloudBeaver only restarts when connections actually change, not on every CronJob run.
 
+> **Restart impact:** CloudBeaver reads `data-sources.json` only at startup, so a restart is required when connections change. The Deployment uses `Recreate` strategy, which causes ~30 seconds of downtime. Active user sessions are lost during the restart.
+
 ### CronJob Permissions
 
 | Scope | Resources | Actions |

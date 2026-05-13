@@ -1,0 +1,17 @@
+---
+kind: Doc
+type: internal
+metadata:
+  name: kuberse-plugins-docs
+  namespace: default
+  title: Kuberse Plugins Documentation
+  description: >
+    User-facing documentation for the Kuberse plugin system: authoring guide,
+    directory layout, OCI distribution, installation flows, lifecycle
+    management, and the canonical plugin template.
+spec:
+  docs_dir: plugins
+  nav:
+    - Home: docs/plugins.md
+    - Plugin Guide:
+      - Overview: docs/plugins.md

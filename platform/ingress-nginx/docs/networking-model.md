@@ -2,6 +2,8 @@
 
 This document explains how network traffic flows through the Kuberse platform -- from external user requests to internal pod communication, including the zero-trust security model and remote cluster access.
 
+> **Note:** The Cloudflare Tunnel component (`cloudflared` pods in the `networking` namespace) is deployed via the [kuberse-networking plugin](../../../plugins/docs/plugins.md). Its configuration (tunnel credentials, public hostname mappings) is managed through that plugin's Helm values. This document describes the overall architecture; see the networking plugin for operational details.
+
 ## Traffic Flow Overview
 
 Kuberse uses a **zero-trust networking model** where no ports are exposed to the public Internet. All external traffic flows through Cloudflare's global network, authenticated and encrypted before reaching the cluster.

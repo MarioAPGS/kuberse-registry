@@ -100,6 +100,36 @@ The Init Job runs a bash script that performs the following steps:
 9. **Create VSO policy**: Grants the VSO operator read access to `secret/data/*` and `buildapps/data/*`
 10. **Create VSO role**: Binds the policy to the VSO controller manager ServiceAccount
 
+## Init Job vs. Module Config CronJob
+
+These are two separate automation components with distinct responsibilities:
+
+| Aspect | Init Job | Module Config CronJob |
+|--------|----------|----------------------|
+| **Runs** | Once (after Vault pods are ready) | Every 5 minutes |
+| **Purpose** | Initialize Vault, unseal, enable engines + auth, create VSO role | Discover modules and create their policies/roles |
+| **Creates** | `secret/` engine, `buildapps/` engine, `kubernetes` auth method, VSO policy/role | Per-module policies and roles (e.g. `postgres-policy`, `kiops-role`) |
+| **Prerequisite** | Vault pods running | Init Job must have completed (Vault unsealed + auth enabled) |
+
+**The Init Job must succeed before the CronJob can function.** If the Init Job fails, no modules will get their Vault roles and all VaultStaticSecrets will fail to authenticate.
+
+## Re-sealing and Pod Restarts
+
+Vault seals itself when pods restart. The Init Job script handles both initial initialization AND re-unsealing:
+
+- If Vault is already initialized (keys exist in `vault-init-keys` Secret), the script skips initialization and only performs unsealing
+- ArgoCD keeps the Init Job synced, so if pods restart, ArgoCD re-runs the Job to unseal
+
+**If all 3 pods restart simultaneously** (e.g., node drain), Vault will be sealed until ArgoCD re-syncs the Init Job or you manually unseal. In practice, ArgoCD's self-heal triggers this within seconds.
+
+## Eventual Consistency
+
+Modules deployed in the same sync wave as Vault may initially fail to authenticate with Vault because:
+1. The CronJob hasn't yet created their policy/role (up to 5 min delay)
+2. The VSO can't read secrets until the role exists
+
+**This is handled automatically:** the VSO retries authentication on its refresh interval (30s). Within 5 minutes of deployment, all modules will have their Vault access configured. No manual intervention is needed.
+
 ## Security Considerations
 
 > **This setup is designed for development/learning with Minikube/K3s.** For production, consider:

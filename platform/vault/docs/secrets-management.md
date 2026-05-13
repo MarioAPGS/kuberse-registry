@@ -264,7 +264,7 @@ spec:
 
 ## BuildApp: Dynamic Secrets
 
-BuildApp environments have a special lifecycle managed by the **kuberse-api** (not by the CronJob):
+BuildApp environments are isolated development workspaces (each in their own namespace) managed by **kuberse-api**. Each BuildApp gets its own Vault secrets under the `buildapps/` engine. The lifecycle is managed by the kuberse-api (not by the CronJob):
 
 1. **Create**: When a new lab is provisioned, the API creates a Vault policy and role scoped to `buildapps/<namespace>/*`
 2. **Sync**: The BuildApp chart creates VaultStaticSecret resources to pull secrets into the lab namespace
@@ -292,3 +292,41 @@ kubectl exec -it vault-0 -n platform -- vault kv delete secret/my-module/config
 ```
 
 > **Note**: Always use `kubectl exec` -- never `kubectl port-forward` to access Vault.
+
+## Pre-deployment Secrets Checklist
+
+Before the platform is fully operational, the following secrets must exist in Vault. The `kuberse setup` command seeds most of these interactively, but if you need to recreate them manually:
+
+| Vault Path | Required Keys | Consumer | Notes |
+|------------|--------------|----------|-------|
+| `secret/postgres/config` | `POSTGRES_USER`, `POSTGRES_PASSWORD` | PostgreSQL | Must exist before PostgreSQL starts |
+| `secret/authentik/config` | `AUTHENTIK_SECRET_KEY`, `AUTHENTIK_BOOTSTRAP_TOKEN` | Authentik | `SECRET_KEY`: 50+ hex chars. `BOOTSTRAP_TOKEN`: API token for provisioner |
+| `secret/authentik/db` | `PG_CONNECTION_STRING`, `AUTHENTIK_POSTGRESQL__PASSWORD` | Authentik + provisioners | Format: `postgresql://authentik:<pass>@postgres.platform.svc.cluster.local:5432/authentik` |
+| `secret/gitea/config` | `admin_username`, `admin_password`, `admin_email` | Gitea (when vault.enabled) | Optional during bootstrap |
+| `secret/kubrain/config` | `PG_CONNECTION_STRING`, `GITHUB_TOKEN`, `GITEA_URL`, `GITEA_TOKEN` | Kubrain | |
+
+**Auto-generated secrets** (do NOT create these manually):
+
+| Vault Path | Written by | Consumers |
+|------------|-----------|-----------|
+| `secret/argocd/oidc` | Authentik OIDC Provisioner Job | ArgoCD |
+| `secret/grafana/oidc` | Authentik OIDC Provisioner Job | Grafana (observability plugin) |
+| `secret/kiops/oidc` | Authentik OIDC Provisioner Job | Kiops |
+
+### The `kuberse-config` Kubernetes Secret
+
+This is a shared Secret (not in Vault) created during `kuberse setup` in the `platform` namespace:
+
+| Key | Description | Used by |
+|-----|-------------|---------|
+| `admin_password` | Platform admin password | Authentik (bootstrap), CloudBeaver (admin login) |
+| `admin_email` | Platform admin email | Authentik (bootstrap), ArgoCD (RBAC admin) |
+| `admin_username` | Platform admin username | CloudBeaver (admin login) |
+| `registry_url` | Internal registry URL | CLI (placeholder resolution) |
+| `git_base_url` | Internal Git base URL | CLI (placeholder resolution) |
+| `org_name` | Organization name | CLI (placeholder resolution) |
+| `base_domain` | Base domain (e.g. `kuberse.net`) | CLI (placeholder resolution) |
+| `cluster_mode` | `minikube` or `k3s` | CLI (init behavior) |
+| `git_provider` | `gitea` or `github` | CLI (provider selection) |
+
+Created automatically by `kuberse setup` -- no manual creation needed.
