@@ -2,7 +2,7 @@
 kind: Doc
 type: internal
 metadata:
-  name: kuberse-plugins-docs
+  name: plugins
   namespace: default
   title: Plugins
   description: >
