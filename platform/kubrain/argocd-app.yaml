@@ -33,11 +33,11 @@ spec:
                   fetch: "*/5 * * * *"
                   token: env.GITHUB_TOKEN
                 gitea:
-                  url: env.GITEA_URL
+                  url: http://gitea-http.platform.svc.cluster.local:3000
                   owner: ${ORG_NAME}
                   match: "**/kuberse-entity.yaml"
                   fetch: "*/5 * * * *"
-                  token: env.GITEA_TOKEN
+                  token: k8s.platform.kuberse-config.gitea_token
               argocd:
                 url: https://argocd-server.argocd.svc.cluster.local
                 insecure: true
