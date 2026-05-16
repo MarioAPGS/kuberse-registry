@@ -1,0 +1,23 @@
+---
+kind: System
+metadata:
+  name: buildapp
+  namespace: platform
+  title: BuildApp
+  description: >
+    BuildApp provisioning API. Manages the lifecycle of developer workspaces
+    including Helm releases, Vault policies, auth roles, and namespace creation.
+  annotations:
+    kubernetes-id: kubrain
+    kubernetes-namespace: platform
+    argocd-app: kubrain
+  links:
+    - url: /api/buildapp/docs
+      title: BuildApp API Docs
+      icon: docs
+spec:
+  type: api
+  owner: group:default/admins
+  domain: default/kuberse
+  system: kubrain
+  openApiUrl: /api/buildapp/docs-json
