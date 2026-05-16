@@ -34,7 +34,7 @@ spec:
                   token: k8s.platform.kuberse-config.github_token
                 gitea:
                   url: http://gitea-http.platform.svc.cluster.local:3000
-                  owner: ${ORG_NAME}
+                  organization: ${ORG_NAME}
                   match: "**/kuberse-entity.yaml"
                   fetch: "*/5 * * * *"
                   token: k8s.platform.kuberse-config.gitea_token
