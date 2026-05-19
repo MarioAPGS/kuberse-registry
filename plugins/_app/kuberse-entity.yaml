@@ -1,0 +1,32 @@
+---
+kind: System
+metadata:
+  name: my-service
+  namespace: platform
+  title: My Service
+  description: >
+    Ejemplo de entidad con API gateway y componente UI remoto.
+  annotations:
+    kubernetes-id: my-service
+    kubernetes-namespace: my-namespace
+  links:
+    - url: https://my-service.example.com
+      title: My Service
+      icon: dashboard
+spec:
+  type: api
+  owner: group:default/admins
+  domain: default/kuberse
+
+  # Backend: kubrain actua como proxy/gateway
+  api:
+    - name: my-service
+      host: http://my-service.my-namespace.svc.cluster.local:8080
+
+  # Frontend: componente UI cargado dinamicamente en kubrain
+  app:
+    - component: https://github.com/YOUR_USERNAME/my-app/releases/download/v1.0.0/component.mjs
+      display: sidebar
+      title: My Service
+      props:
+        apiHost: /api/v1/my-service
